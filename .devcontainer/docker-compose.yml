@@ -1,0 +1,30 @@
+services:
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama:/root/.ollama
+    networks:
+      - ollama-network
+
+
+  jupyter:
+    volumes:
+    # Update this to wherever you want VS Code to mount the folder of your project
+      - ..:/workspaces:cached
+    command: sleep infinity
+    build:
+      context: ./
+    ports:
+      - "8888:8888"
+    depends_on:
+      - ollama
+    networks:
+      - ollama-network
+
+volumes:
+  ollama:
+
+networks:
+  ollama-network:
